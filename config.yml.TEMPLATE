@@ -1,0 +1,3 @@
+# Config for twilio. Set these yourself
+twilio_acc_sid: ""
+twilio_auth_key: ""

@@ -2,10 +2,32 @@ import http.server
 import socketserver
 import io
 import cgi
+import twilio
+import yaml
 
+# Set these yourself
+TWILIO_ACC_SID = ""
+TWILIO_AUTH_TOKEN = ""
+TWILIO_TO_PHONE = ""
 PORT = 6969
 
+class LinkYeeter:
+
+    def __init__(self):
+        self.cfg_dict = self.read_cfg()
+        self.client = twilio.Client(self.cfg_dict["twilio_acc_sid"], self.cfg_dict["twilio_auth_key"])
+
+    def read_cfg(self):
+        with open('config.yml') as file:
+            cfg_dict = yaml.load(file, Loader=yaml.FullLoader)
+        return cfg_dict
+
+    def yeetit(self, filename):
+        print("test")
+
 class YeetRequestHandler(http.server.SimpleHTTPRequestHandler):
+
+    yeet_link = LinkYeeter()
 
     def do_POST(self):
 
@@ -36,9 +58,10 @@ class YeetRequestHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 if isinstance(form["file"], list):
                     for record in form["file"]:
-                        open("./%s"%record.filename, "wb").write(record.file.read())
+                        print(record.file.read())
                 else:
                     open("./%s"%form["file"].filename, "wb").write(form["file"].file.read())
+                    print(form["file"].filename)
             except IOError:
                 return (False, "Can't create file to write, do you have write perms?")
         return (True, "Files Uploaded")
