@@ -2,19 +2,19 @@ import http.server
 import socketserver
 import io
 import cgi
-import twilio
+from twilio.rest import Client
 import yaml
 
 # Set these yourself
 TWILIO_ACC_SID = ""
 TWILIO_AUTH_TOKEN = ""
-PORT = 6969
+PORT = 6968
 
 class LinkYeeter:
 
     def __init__(self):
         self.cfg_dict = self.read_cfg()
-        self.client = twilio.Client(self.cfg_dict["twilio_acc_sid"], self.cfg_dict["twilio_auth_key"])
+        self.client = Client(self.cfg_dict["twilio_acc_sid"], self.cfg_dict["twilio_auth_key"])
 
     def read_cfg(self):
         with open('config.yml') as file:
@@ -59,7 +59,7 @@ class YeetRequestHandler(http.server.SimpleHTTPRequestHandler):
                     for record in form["file"]:
                         print(record.file.read())
                 else:
-                    open("./%s"%form["file"].filename, "wb").write(form["file"].file.read())
+                    open("./files/%s"%form["file"].filename, "wb").write(form["file"].file.read())
                     print(form["file"].filename)
             except IOError:
                 return (False, "Can't create file to write, do you have write perms?")

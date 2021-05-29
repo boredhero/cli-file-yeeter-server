@@ -130,3 +130,5 @@ dmypy.json
 
 # Muh files
 config.yml
+*.png
+*.jpg
