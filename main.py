@@ -8,7 +8,6 @@ import yaml
 # Set these yourself
 TWILIO_ACC_SID = ""
 TWILIO_AUTH_TOKEN = ""
-TWILIO_TO_PHONE = ""
 PORT = 6969
 
 class LinkYeeter:
