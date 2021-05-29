@@ -6,15 +6,14 @@ from twilio.rest import Client
 import yaml
 
 # Set these yourself
-TWILIO_ACC_SID = ""
-TWILIO_AUTH_TOKEN = ""
-PORT = 6968
+PORT = 6969
 
 class LinkYeeter:
 
     def __init__(self):
         self.cfg_dict = self.read_cfg()
         self.client = Client(self.cfg_dict["twilio_acc_sid"], self.cfg_dict["twilio_auth_key"])
+        self.pretty_link = self.cfg_dict["pretty_link"]
 
     def read_cfg(self):
         with open('config.yml') as file:
@@ -22,7 +21,13 @@ class LinkYeeter:
         return cfg_dict
 
     def yeetit(self, filename):
-        print("test")
+        link = f"{self.pretty_link}{filename}"
+        message = self.client.messages \
+            .create(
+                body=f"{self.cfg_dict['message']}: {link}",
+                from_=self.cfg_dict["twilio_from_phone"],
+                to=self.cfg_dict["twilio_to_phone"]
+            )
 
 class YeetRequestHandler(http.server.SimpleHTTPRequestHandler):
 
@@ -57,7 +62,7 @@ class YeetRequestHandler(http.server.SimpleHTTPRequestHandler):
             try:
                 if isinstance(form["file"], list):
                     for record in form["file"]:
-                        print(record.file.read())
+                        open("./files/%s"%record.filename, "wb").write(record.file.read())
                 else:
                     open("./files/%s"%form["file"].filename, "wb").write(form["file"].file.read())
                     print(form["file"].filename)
