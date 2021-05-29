@@ -28,6 +28,7 @@ class LinkYeeter:
                 from_=self.cfg_dict["twilio_from_phone"],
                 to=self.cfg_dict["twilio_to_phone"]
             )
+        message.sid
 
 class YeetRequestHandler(http.server.SimpleHTTPRequestHandler):
 
