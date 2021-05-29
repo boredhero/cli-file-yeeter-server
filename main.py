@@ -64,9 +64,10 @@ class YeetRequestHandler(http.server.SimpleHTTPRequestHandler):
                 if isinstance(form["file"], list):
                     for record in form["file"]:
                         open("./files/%s"%record.filename, "wb").write(record.file.read())
+                        self.yeet_link.yeetit(str(record.filename))
                 else:
                     open("./files/%s"%form["file"].filename, "wb").write(form["file"].file.read())
-                    print(form["file"].filename)
+                    self.yeet_link.yeetit(str(form["file"].filename))
             except IOError:
                 return (False, "Can't create file to write, do you have write perms?")
         return (True, "Files Uploaded")
